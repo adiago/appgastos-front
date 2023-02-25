@@ -2,3 +2,4 @@
 /.idea
 .env
 .env.backup
+package-lock.json
