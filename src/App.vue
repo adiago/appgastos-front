@@ -12,20 +12,22 @@ const data = ref(null)
 
 onMounted (() => {
   store.getSummary();
+  store.getBalance();
   transactions.getLasts();
 })
 </script>
 
 <template>
-  <v-app v-if="!transactions.lasts.length"
+
+  <v-app v-if="!store.balance"
   theme="dark">
-    <Loading/>
+    <Loading :first-load="true"/>
   </v-app>
   <v-app v-else
   theme="dark">
     <TheHeader :debtor="store.debtor" :balance="store.balance"/>
     <v-main fluid>
-      <Welcome v-if="store.page === ''"/>
+      <Welcome v-if="store.page === ''" :transactions="transactions"/>
       <List v-if="store.page === 'lists'"/>
       <Stats v-if="store.page === 'stats'"/>
     </v-main>

@@ -1,17 +1,20 @@
 <script setup>
 import { store, transactions } from '@/store'
-import {onMounted, ref} from "vue";
+import {onMounted, computed, ref} from "vue";
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
 const tagSelected = ref(1)
 const transactionTypeSelected = ref(1)
 const amountSelected = ref(null)
-const userSelected = ref(1)
+const userSelected = ref(null)
 const dateSelected = ref(null)
 const descriptionSelected = ref(null)
 const valid = ref(false)
-
+const loadingTransaction = ref(false)
 
 onMounted (() => {
+  userSelected.value = store.currentUserId
 })
 const data = ref(null)
 
@@ -24,16 +27,18 @@ async function send() {
     'description': descriptionSelected.value,
     'amount': amountSelected.value
   }
+  loadingTransaction.value = true
   let response = await transactions.send(data)
   if(response === 200) {
-    cleanForm()
+    cleanForm();
+    await store.getBalance();
   }
+  loadingTransaction.value = false
 }
 
 function cleanForm() {
   dateSelected.value = null
   transactionTypeSelected.value = 1
-  userSelected.value = 1
   tagSelected.value = 1
   descriptionSelected.value = null
   amountSelected.value = null
@@ -43,15 +48,20 @@ function cleanForm() {
 <template>
   <div>
       <v-form
+          :disabled="loadingTransaction"
           ref="form"
           v-model="valid"
       >
-<!--        <v-date-picker-->
-<!--            v-model="dateSelected"-->
-<!--            class="mt-4"-->
-<!--            min="2016-06-15"-->
-<!--            max="2018-03-20"-->
-<!--        ></v-date-picker>-->
+        <VueDatePicker
+            v-model="dateSelected"
+            :clearable="true"
+            :enable-time-picker="false"
+            locale="es"
+            auto-apply
+            format="dd/MM/yyyy"
+            dark
+            class="pb-4"
+        />
 
         <v-text-field
             type="number"
@@ -97,8 +107,16 @@ function cleanForm() {
             color="success"
             class="mt-4"
             @click="send"
+            :disabled="loadingTransaction"
         >
-          Añadir
+          <span v-if="!loadingTransaction">Añadir</span>
+          <span v-else>
+            <v-progress-circular
+                class="center"
+                :width="3"
+                indeterminate
+            ></v-progress-circular>
+          </span>
         </v-btn>
       </v-form>
   </div>

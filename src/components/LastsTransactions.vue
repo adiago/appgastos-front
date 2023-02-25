@@ -7,7 +7,6 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 library.add(faCircleNotch)
 
 onMounted (() => {
-   // transactions.getLasts();
 })
 
 </script>
@@ -21,7 +20,7 @@ onMounted (() => {
       >
         <td>{{ item.date }}</td>
         <td>{{ item.description }}</td>
-        <td>{{ item.amount }}</td>
+        <td :style="`color:`+item.user_color+`!important`">{{ item.amount }} €</td>
       </tr>
       </tbody>
     </v-table>

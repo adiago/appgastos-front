@@ -1,16 +1,16 @@
 <script setup>
-import {onMounted} from "vue";
 import TransactionForm from "@/components/TransactionForm.vue";
 import LastsTransactions from "@/components/LastsTransactions.vue";
 
-onMounted (() => {
+const props = defineProps({
+  transactions: Object
 })
 
 </script>
 <template>
   <div class="mt-8 px-5">
     <TransactionForm/>
-    <LastsTransactions/>
+    <LastsTransactions v-show="props.transactions"/>
   </div>
 </template>
 

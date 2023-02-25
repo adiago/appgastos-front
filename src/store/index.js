@@ -8,17 +8,24 @@ export const store = reactive({
     tags: [],
     transactionType: [],
     users: [],
+    currentUserId: window.navigator.userAgent.includes('iPhone') ? 2 : 1,
+    currentUserName: window.navigator.userAgent.includes('iPhone') ? import.meta.env.VITE_USER_2_NAME : import.meta.env.VITE_USER_1_NAME,
 
     async getSummary() {
         const response = await fetch( APISettings.baseURL + 'summary')
             .then(response => response.json())
-        this.balance = response.data.balance
-        this.debtor = response.data.debtor
         this.tags = response.data.tags
         this.transactionType = response.data.transactionType
         this.users = response.data.users
-
     },
+
+    async getBalance() {
+        const response = await fetch( APISettings.baseURL + 'balance')
+            .then(response => response.json())
+        this.balance = response.data.balance
+        this.debtor = response.data.debtor
+    },
+
     setPage(slug) {
         this.page = slug
     },

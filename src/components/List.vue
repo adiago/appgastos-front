@@ -2,12 +2,19 @@
 import { transactions } from '@/store'
 import {onMounted, ref} from "vue";
 import Loading from "@/components/Loading.vue";
+import Vue3EasyDataTable from 'vue3-easy-data-table';
+import 'vue3-easy-data-table/dist/style.css';
 
 onMounted (() => {
   transactions.getAll();
 })
 const data = ref(null)
-const search = ''
+const search = ref('')
+const headers = ref([
+  {text: "Fecha", value: "date", sortable: true},
+  {text: "Descripción", value: "description"},
+  {text: "Cantidad", value: "amount", sortable: true}
+])
 </script>
 
 <template>
@@ -15,18 +22,16 @@ const search = ''
     <Loading/>
   </div>
   <div v-else class="mt-8 px-5">
-    <v-table>
-      <tbody>
-      <tr
-          v-for="(item,idx) in transactions.all"
-          :key="idx"
-      >
-        <td>{{ item.date }}</td>
-        <td>{{ item.description }}</td>
-        <td>{{ item.amount }}€</td>
-      </tr>
-      </tbody>
-    </v-table>
+    <Vue3EasyDataTable
+        alternating
+        theme-color="dark"
+        :headers="headers"
+        :items="transactions.all"
+    >
+      <template #item-amount="item">
+        <span :style="`color:`+item.user_color+`!important`">{{ item.amount }} €</span>
+      </template>
+    </Vue3EasyDataTable>
   </div>
 
 </template>
