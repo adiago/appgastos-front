@@ -12,7 +12,7 @@ onMounted (() => {
 </script>
 <template>
   <div v-if="transactions.lasts.length">
-    <v-table theme="light">
+    <v-table density="compact" theme="light">
       <tbody>
       <tr
           v-for="(item,idx) in transactions.lasts"
@@ -20,7 +20,7 @@ onMounted (() => {
       >
         <td>{{ item.date }}</td>
         <td>{{ item.description }}</td>
-        <td :style="`color:`+item.user_color+`!important`">{{ item.amount }} €</td>
+        <td style="width:30%" :style="`color:`+item.user_color+`!important`">{{ item.amount }} €</td>
       </tr>
       </tbody>
     </v-table>

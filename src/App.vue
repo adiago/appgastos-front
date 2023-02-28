@@ -14,11 +14,11 @@ onMounted (() => {
   store.getSummary();
   store.getBalance();
   transactions.getLasts();
+  transactions.getAll();
 })
 </script>
 
 <template>
-
   <v-app v-if="!store.balance"
   theme="dark">
     <Loading :first-load="true"/>
@@ -27,9 +27,9 @@ onMounted (() => {
   theme="dark">
     <TheHeader :debtor="store.debtor" :balance="store.balance"/>
     <v-main fluid>
-      <Welcome v-if="store.page === ''" :transactions="transactions"/>
-      <List v-if="store.page === 'lists'"/>
-      <Stats v-if="store.page === 'stats'"/>
+      <Welcome v-show="store.page === ''" :transactions="transactions"/>
+      <List v-show="store.page === 'lists'"/>
+      <Stats v-show="store.page === 'stats'"/>
     </v-main>
     <v-bottom-navigation grow>
        <TheFooter/>

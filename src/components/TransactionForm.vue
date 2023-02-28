@@ -8,7 +8,7 @@ const tagSelected = ref(1)
 const transactionTypeSelected = ref(1)
 const amountSelected = ref(null)
 const userSelected = ref(null)
-const dateSelected = ref(null)
+const dateSelected = ref(new Date())
 const descriptionSelected = ref(null)
 const valid = ref(false)
 const loadingTransaction = ref(false)
@@ -52,75 +52,110 @@ function cleanForm() {
           ref="form"
           v-model="valid"
       >
-        <VueDatePicker
-            v-model="dateSelected"
-            :clearable="true"
-            :enable-time-picker="false"
-            locale="es"
-            auto-apply
-            format="dd/MM/yyyy"
-            dark
-            class="pb-4"
-        />
+        <v-container>
+        <v-row>
+          <v-col>
+            <VueDatePicker
+              v-model="dateSelected"
+              :enable-time-picker="false"
+              :clearable="false"
+              locale="es"
+              auto-apply
+              format="dd/MM/yyyy"
+              required
+          >
+              <template #dp-input="{ value, onInput, onEnter, onTab, onClear }">
+                <v-text-field
+                    :value="value"
+                    variant="underlined"
+                    density="compact"
 
-        <v-text-field
-            type="number"
-            v-model="amountSelected"
-            label="Importe"
-            prefix="€"
-        ></v-text-field>
+                ></v-text-field>
+              </template>
+            </VueDatePicker>
+          </v-col>
+          <v-col>
+            <v-text-field
+                type="number"
+                variant="underlined"
+                v-model="amountSelected"
+                label="Importe"
+                prefix="€"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-text-field
+              v-model="descriptionSelected"
+              variant="underlined"
+              label="Descripción"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col>
+            <v-select
+                v-model="tagSelected"
+                :items="store.tags"
+                item-title="name"
+                item-value="id"
+                variant="underlined"
+                density="compact"
+                required
+            ></v-select>
+          </v-col>
 
-        <v-text-field
-            v-model="descriptionSelected"
-            label="Descripción"
-            required
-        ></v-text-field>
-
-        <v-select
-            v-model="tagSelected"
-            :items="store.tags"
-            item-title="name"
-            item-value="id"
-            density="compact"
-            required
-        ></v-select>
-
-        <v-select
-            v-model="transactionTypeSelected"
-            :items="store.transactionType"
-            item-title="name"
-            item-value="id"
-            density="compact"
-            required
-        ></v-select>
-
-        <v-select
-            v-model="userSelected"
-            :items="store.users"
-            item-title="name"
-            item-value="id"
-            density="compact"
-            required
-        ></v-select>
-        <v-btn
-            style=" left: 50%;-ms-transform: translate(-50%, -50%);transform: translate(-50%, -50%);"
-            color="success"
-            class="mt-4"
-            @click="send"
-            :disabled="loadingTransaction"
-        >
-          <span v-if="!loadingTransaction">Añadir</span>
-          <span v-else>
-            <v-progress-circular
-                class="center"
-                :width="3"
-                indeterminate
-            ></v-progress-circular>
-          </span>
-        </v-btn>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-select
+                v-model="transactionTypeSelected"
+                :items="store.transactionType"
+                item-title="name"
+                item-value="id"
+                variant="underlined"
+                density="compact"
+                required
+            ></v-select>
+          </v-col>
+          <v-col>
+            <v-select
+                v-model="userSelected"
+                :items="store.users"
+                item-title="name"
+                item-value="id"
+                variant="underlined"
+                density="compact"
+                required
+            ></v-select>
+          </v-col>
+        </v-row>
+          <v-row>
+          <v-btn
+              style=" left: 50%;-ms-transform: translate(-50%, -50%);transform: translate(-50%, -50%);"
+              color="success"
+              class="mt-5"
+              @click="send"
+              :disabled="loadingTransaction"
+          >
+            <span v-if="!loadingTransaction">Añadir</span>
+            <span v-else>
+              <v-progress-circular
+                  class="center"
+                  :width="3"
+                  indeterminate
+              ></v-progress-circular>
+            </span>
+          </v-btn>
+          </v-row>
+        </v-container>
       </v-form>
   </div>
 </template>
 
 <style scoped>
+.v-col {
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
 </style>

@@ -1,13 +1,10 @@
 <script setup>
 import { transactions } from '@/store'
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import Loading from "@/components/Loading.vue";
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 
-onMounted (() => {
-  transactions.getAll();
-})
 const data = ref(null)
 const search = ref('')
 const headers = ref([
