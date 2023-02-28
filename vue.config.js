@@ -1,3 +1,8 @@
 module.exports = {
-    publicPath: '/appgastos-front/'
+    mode: 'production',
+    optimization: {
+        nodeEnv: 'production',
+        minimize: true
+    },
+    publicPath: ''
 };
